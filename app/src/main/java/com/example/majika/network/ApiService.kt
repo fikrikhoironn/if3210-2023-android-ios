@@ -22,6 +22,9 @@ private val retrofit = Retrofit.Builder()
 interface ApiService {
     @GET("menu/food")
     suspend fun getMenuFood(): MenuApiModel
+
+    @GET("menu/drink")
+    suspend fun getMenuDrink(): MenuApiModel
 }
 
 object Api {
