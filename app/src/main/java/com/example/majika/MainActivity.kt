@@ -2,38 +2,44 @@ package com.example.majika
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import androidx.fragment.app.Fragment
+import com.example.majika.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val cabangRestoranFragment = CabangRestoranFragment()
-        val testFragment = TestFragment()
-
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment, cabangRestoranFragment)
-            commit()
-        }
-
-        val btnCabangRestoranFragment = findViewById<View>(R.id.btnCabangRestoran)
-        val btnTestFragment = findViewById<View>(R.id.btnTestFragment)
-
-        btnCabangRestoranFragment.setOnClickListener {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.flFragment, cabangRestoranFragment)
-                addToBackStack(null)
-                commit()
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.cabang_restoran -> {
+                    replaceFragment(CabangRestoranFragment())
+                    true
+                }
+                R.id.daftar_makanan -> {
+                    replaceFragment(DaftarMakananFragment())
+                    true
+                }
+                R.id.twibbon -> {
+                    replaceFragment(TwibbonFragment())
+                    true
+                }
+                R.id.keranjang -> {
+                    replaceFragment(KeranjangFragment())
+                    true
+                }
+                else -> false
             }
         }
+    }
 
-        btnTestFragment.setOnClickListener {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.flFragment, testFragment)
-                addToBackStack(null)
-                commit()
-            }
-        }
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
     }
 }
