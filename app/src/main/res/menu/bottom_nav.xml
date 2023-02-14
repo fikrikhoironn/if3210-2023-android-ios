@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/daftar_makanan"
+        android:icon="@drawable/ic_daftar_makanan"
+        android:title="@string/daftar_makanan" />
+    <item
+        android:id="@+id/cabang_restoran"
+        android:icon="@drawable/ic_cabang_restoran"
+        android:title="@string/cabang_restoran" />
+    <item
+        android:id="@+id/twibbon"
+        android:icon="@drawable/ic_twibbon"
+        android:title="@string/twibbon" />
+    <item
+        android:id="@+id/keranjang"
+        android:icon="@drawable/ic_keranjang"
+        android:title="@string/keranjang" />
+
+</menu>
