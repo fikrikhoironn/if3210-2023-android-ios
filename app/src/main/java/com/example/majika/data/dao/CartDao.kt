@@ -14,6 +14,9 @@ interface CartDao {
     @Query("SELECT * FROM Cart WHERE name = :name")
     suspend fun loadByName(name: String): Cart
 
+    @Query("SELECT SUM(priceInCart) FROM Cart")
+    suspend fun calculatePrice(): Int?
+
     @Query("UPDATE Cart SET totalInCart = :totalInCart, priceInCart = :priceInCart WHERE name = :name ")
     suspend fun update(name: String, totalInCart: Int, priceInCart: Int)
 
