@@ -1,68 +1,67 @@
 package com.example.majika.adapter
 
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.majika.CabangRestoranFragment
 import com.example.majika.R
+import com.example.majika.models.CabangRestoranApiModel
+import com.example.majika.models.CabangRestoranModel
+import com.example.majika.network.CabangRestoranApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CabangRestoranAdapter: RecyclerView.Adapter<CabangRestoranAdapter.ViewHolder>() {
+class CabangRestoranAdapter(
+    private val cabangRestoranList: List<CabangRestoranModel?>?
+): RecyclerView.Adapter<CabangRestoranAdapter.ViewHolder>() {
 
-    private val name = arrayOf(
-        "Restoran A", "Restoran B", "Restoran C", "Restoran D", "Restoran E"
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CabangRestoranAdapter.ViewHolder {
+        val view: View = LayoutInflater.from(parent.context)
+            .inflate(R.layout.card_cabang_restoran, parent, false)
+        return ViewHolder(view)
+    }
 
-    private val address = arrayOf(
-        "Jalan A", "Jalan B", "Jalan C", "Jalan D", "Jalan E"
-    )
+    override fun getItemCount(): Int {
+        if (cabangRestoranList == null) {
+            return 0
+        }
+        return cabangRestoranList?.size!!
+    }
 
-    private val phone_number = arrayOf(
-        "1234", "1236", "3131", "3121", "5242"
-    )
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(cabangRestoranList?.get(position)!!)
+    }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val restoranName: TextView = view.findViewById(R.id.restoranName)
+        val popularFood: TextView = view.findViewById(R.id.popularFood)
+        val restoranAddress: TextView = view.findViewById(R.id.restoranAddress)
+        val contactPerson: TextView = view.findViewById(R.id.contactPerson)
+        val btnMap: Button = view.findViewById(R.id.btnMap)
+        val context = view.context
 
-        var restoranName: TextView
-        var restoranAddress: TextView
-        var restoranPhone: TextView
-
-        init {
-            restoranName = itemView.findViewById(R.id.restoranName)
-            restoranAddress = itemView.findViewById(R.id.restoranAddress)
-            restoranPhone = itemView.findViewById(R.id.restoranPhone)
-
-            itemView.setOnClickListener {
-                var position: Int = bindingAdapterPosition
-                val context = itemView.context
-                val intent = Intent(context, CabangRestoranFragment::class.java).apply {
-                    putExtra("NUMBER", position)
-                    putExtra("NAME", restoranName.text)
-                    putExtra("ADDRESS", restoranAddress.text)
-                    putExtra("PHONE", restoranPhone.text)
-                }
-                context.startActivity(intent)
+        fun bind(cabangRestoran: CabangRestoranModel) {
+            restoranName.text = cabangRestoran.name
+            popularFood.text = cabangRestoran.popular_food
+            restoranAddress.text = cabangRestoran.address
+            contactPerson.text = "Contact ${cabangRestoran.contact_person} (${cabangRestoran.phone_number})"
+            btnMap.setOnClickListener {
+                val gmmIntentUri = Uri.parse("geo:${cabangRestoran.latitude},${cabangRestoran.longitude}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                context.startActivity(mapIntent)
             }
         }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val v = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.card_cabang_restoran, viewGroup, false)
-        return ViewHolder(v)
-    }
-
-    override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
-        viewHolder.restoranName.text = name[i]
-        viewHolder.restoranAddress.text = address[i]
-        viewHolder.restoranPhone.text = phone_number[i]
-
-    }
-
-    override fun getItemCount(): Int {
-        return name.size
-    }
 
 }

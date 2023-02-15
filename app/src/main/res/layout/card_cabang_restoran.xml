@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="17dp">
+            android:padding="13dp">
 
             <TextView
                 android:id="@+id/restoranName"
@@ -31,6 +31,14 @@
                 android:textColor="#fff4e7" />
 
             <TextView
+                android:id="@+id/popularFood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:textSize="18sp"
+                android:textColor="#fff4e7" />
+
+            <TextView
                 android:id="@+id/restoranAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,10 +46,10 @@
                 android:textColor="#fff4e7"/>
 
             <TextView
-                android:id="@+id/restoranPhone"
+                android:id="@+id/contactPerson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textColor="#fff4e7"/>
 
             <Button
