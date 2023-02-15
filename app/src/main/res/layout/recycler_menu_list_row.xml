@@ -30,7 +30,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="Menu" />
 
@@ -42,7 +42,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="#6A6A6A"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 tools:text="0 Terjual" />
 
             <TextView
@@ -53,7 +53,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="#6A6A6A"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 tools:text="Deskripsi" />
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 tools:text="IDR 0" />
 
@@ -85,7 +85,50 @@
                 android:paddingEnd="20dp"
                 android:layout_margin="10dp"
                 android:gravity="center_horizontal"
-                android:layout_gravity="end" />
+                android:layout_gravity="end"
+                android:visibility="visible" />
+
+            <LinearLayout android:id="@+id/llMenuAddMoreLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <ImageView android:id="@+id/ivMenuImageMinus"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_remove_circle"
+                    app:tint="#F9A821"
+                    />
+
+                <TextView android:id="@+id/tvMenuCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@color/black"
+                    tools:text="1"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textStyle="bold"
+                    android:background="@color/white"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+
+                <ImageView android:id="@+id/ivMenuimageAddOne"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_add_circle"
+                    app:tint="#F9A821"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
