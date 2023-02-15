@@ -1,5 +1,6 @@
 package com.example.majika.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -54,11 +55,56 @@ class MenuListAdapter(
             tvMenuSold.text = "${menu.sold} terjual"
             tvMenuDescription.text = menu.description
 
+            if (menu.totalInCart != null && menu.totalInCart!! > 0) {
+                tvMenuAddToCart.visibility = View.GONE
+                llMenuAddMoreLayout.visibility = View.VISIBLE
+                tvMenuCount.text = menu.totalInCart.toString()
+
+            }
+
             tvMenuAddToCart.setOnClickListener {
                 menu.totalInCart = 1
+                Log.d("PRICE SEBELUM", menu.priceInCart.toString())
+                menu.priceInCart = menu.price?.times(menu.totalInCart!!)
+                Log.d("PRICE SETELAH", menu.priceInCart.toString())
                 clickListener.addToCartClickListener(menu)
                 tvMenuAddToCart.visibility = View.GONE
                 llMenuAddMoreLayout.visibility = View.VISIBLE
+                tvMenuCount.text = menu.totalInCart.toString()
+            }
+
+            ivMenuImageMinus.setOnClickListener {
+                var total: Int = menu.totalInCart!!
+                total--
+
+                if (total > 0) {
+                    menu.totalInCart = total
+                    Log.d("PRICE SEBELUM", menu.priceInCart.toString())
+                    menu.priceInCart = menu.price?.times(menu.totalInCart!!)
+                    Log.d("PRICE SETELAH", menu.priceInCart.toString())
+                    clickListener.updateCartClickListener(menu)
+                    tvMenuCount.text = menu.totalInCart.toString()
+                } else {
+                    menu.totalInCart = null
+                    Log.d("PRICE SEBELUM", menu.priceInCart.toString())
+                    menu.priceInCart = null
+                    Log.d("PRICE SETELAH", menu.priceInCart.toString())
+                    clickListener.removeFromCartClickListener(menu)
+
+                    tvMenuAddToCart.visibility = View.VISIBLE
+                    llMenuAddMoreLayout.visibility = View.GONE
+                }
+            }
+
+            ivMenuimageAddOne.setOnClickListener {
+                var total: Int = menu.totalInCart!!
+                total++
+
+                menu.totalInCart = total
+                Log.d("PRICE SEBELUM", menu.priceInCart.toString())
+                menu.priceInCart = menu.price?.times(menu.totalInCart!!)
+                Log.d("PRICE SETELAH", menu.priceInCart.toString())
+                clickListener.updateCartClickListener(menu)
                 tvMenuCount.text = menu.totalInCart.toString()
             }
         }
