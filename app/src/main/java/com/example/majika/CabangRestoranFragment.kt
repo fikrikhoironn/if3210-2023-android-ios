@@ -32,9 +32,9 @@ class CabangRestoranFragment : Fragment() {
     }
 
     private suspend fun getCabangRestoranData(): List<CabangRestoranModel?>? {
-        val menu = CabangRestoranApi.retrofitService.getCabangRestoran()
+        val cabangRestoran = CabangRestoranApi.retrofitService.getCabangRestoran()
 
-        return menu.data
+        return cabangRestoran.data!!.sortedBy { it?.name }
     }
 
     private fun initRecyclerView(view: View) {
