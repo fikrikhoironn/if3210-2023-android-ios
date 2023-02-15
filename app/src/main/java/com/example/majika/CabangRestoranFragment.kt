@@ -45,6 +45,7 @@ class CabangRestoranFragment : Fragment() {
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                Log.d("Cabang Restoran List Sebelum :", cabangRestoranList.toString())
                 cabangRestoranList.addAll(getCabangRestoranData()!!)
                 Log.d("Cabang Restoran List :", cabangRestoranList.toString())
 
