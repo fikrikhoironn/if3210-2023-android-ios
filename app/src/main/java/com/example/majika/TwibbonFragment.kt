@@ -3,16 +3,15 @@ package com.example.majika
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Camera
+import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CaptureRequest
+import android.hardware.camera2.*
 import android.hardware.camera2.params.SessionConfiguration
+import android.media.ImageReader
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -22,8 +21,12 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import java.io.File
 
 class TwibbonFragment : Fragment() {
 
@@ -36,6 +39,8 @@ class TwibbonFragment : Fragment() {
     private lateinit var captureRequest: CaptureRequest
     private lateinit var capReq: CaptureRequest.Builder
     private var cameraDevice: CameraDevice ?= null
+    lateinit var imageReader: ImageReader
+    private var isFreeze: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +81,27 @@ class TwibbonFragment : Fragment() {
                 //
             }
         }
+
+        val btnSwitch = view.findViewById<Button>(R.id.changeView)
+        btnSwitch.setOnClickListener {
+            switchCamera()
+        }
+
+        imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.JPEG, 1)
+        val btnCapture = view.findViewById<Button>(R.id.captureButton)
+        btnCapture.setOnClickListener {
+            if (!isFreeze) {
+                captureImage()
+                btnCapture.text = "Preview"
+                Toast.makeText(requireContext(), "Image Captured", Toast.LENGTH_SHORT).show()
+                isFreeze = true
+            } else {
+                resumePreview()
+                btnCapture.text = "Capture"
+                Toast.makeText(requireContext(), "Preview mode ON", Toast.LENGTH_SHORT).show()
+                isFreeze = false
+            }
+        }
     }
 
     private fun openCamera() {
@@ -91,7 +117,7 @@ class TwibbonFragment : Fragment() {
                     var surface = Surface(textureView.surfaceTexture)
                     capReq.addTarget(surface)
 
-                    cameraDevice!!.createCaptureSession(listOf(surface), object: CameraCaptureSession.StateCallback() {
+                    cameraDevice!!.createCaptureSession(listOf(surface, imageReader.surface), object: CameraCaptureSession.StateCallback() {
                         override fun onConfigured(p0: CameraCaptureSession) {
                             cameraCaptureSession = p0
                             cameraCaptureSession.setRepeatingRequest(capReq.build(), null, null)
@@ -151,5 +177,43 @@ class TwibbonFragment : Fragment() {
             }
         }
         throw RuntimeException("Camera orientation does not exist.")
+    }
+
+    private fun captureImage() {
+        val captureBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)?.apply {
+            addTarget(imageReader.surface)
+            set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+        }?.build()
+
+        cameraCaptureSession.stopRepeating()
+        captureBuilder.let {
+            cameraCaptureSession.setRepeatingRequest(it!!, null, null)
+        }
+    }
+
+    private fun resumePreview() {
+        val previewRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+        previewRequestBuilder?.addTarget(Surface(textureView.surfaceTexture))
+
+        val previewRequest = previewRequestBuilder?.build()
+        cameraCaptureSession?.setRepeatingRequest(previewRequest!!, null, null)
+    }
+
+    private fun switchCamera() {
+        cameraDevice?.close()
+
+        var cameraFacing = if (cameraId == getCameraId(CameraCharacteristics.LENS_FACING_FRONT)) {
+            CameraCharacteristics.LENS_FACING_BACK
+        } else {
+            CameraCharacteristics.LENS_FACING_FRONT
+        }
+
+        cameraId = getCameraId(cameraFacing)
+
+        try {
+            openCamera()
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 }
