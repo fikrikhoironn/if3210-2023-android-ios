@@ -40,20 +40,20 @@ class PaymentActivity : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
-                CoroutineScope(Dispatchers.Main).launch {
+//                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+                CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        var paymentResponse = Api.retrofitService.postPayment(it.text)
-                        Toast.makeText(this@PaymentActivity, "lewat nembak", Toast.LENGTH_SHORT).show()
-                        if (paymentResponse.isSuccessful) {
-                            Toast.makeText(this@PaymentActivity, "Payment Success", Toast.LENGTH_SHORT).show()
+                        Log.v("Main", "Scan result: ${it.text}")
+                        val response = Api.retrofitService.postPayment(it.text)
+                        if (response.status == "SUCCESS"){
+                            Log.v("Main", "Payment Success")
+                            Toast.makeText(this@PaymentActivity, "Payment Success", Toast.LENGTH_LONG).show()
                         } else {
-                            Toast.makeText(this@PaymentActivity, "Payment Failed kodenya salah", Toast.LENGTH_SHORT).show()
+                            Log.v("Main", "Payment Failed")
+                            Toast.makeText(this@PaymentActivity, "Payment Failed", Toast.LENGTH_LONG).show()
                         }
-
-                    }
-                    catch (e: Exception) {
-                        Toast.makeText(this@PaymentActivity, "Payment Failed gagal ngepost", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Log.e("Main", "Error: ${e.message}")
                     }
                 }
 
