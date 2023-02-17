@@ -7,8 +7,9 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 
-private const val BASE_URL = "http://192.168.56.1:3000/v1/"
+private const val BASE_URL = "http://localhost/v1/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -25,6 +26,9 @@ interface ApiService {
 
     @GET("menu/drink")
     suspend fun getMenuDrink(): MenuApiModel
+
+    @POST("payment/:code")
+    suspend fun postPayment(code: String): MenuApiModel
 }
 
 object Api {

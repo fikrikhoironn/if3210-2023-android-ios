@@ -1,5 +1,6 @@
 package com.example.majika
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -79,6 +80,9 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
 
     private fun handleCheckout() {
         Toast.makeText(activity, "Membayar IDR ${totalCartPrice.toString()}", Toast.LENGTH_LONG).show()
+        val intent = Intent(activity, PaymentActivity::class.java)
+        activity?.startActivity(intent)
+
     }
 
     override fun updateCartClickListener(cart: Cart) {
