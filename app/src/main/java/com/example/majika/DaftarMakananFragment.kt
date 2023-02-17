@@ -2,14 +2,12 @@ package com.example.majika
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.RoomDatabase
 import com.example.majika.adapter.MenuListAdapter
 import com.example.majika.data.MajikaRoomDatabase
 import com.example.majika.data.entity.Cart
