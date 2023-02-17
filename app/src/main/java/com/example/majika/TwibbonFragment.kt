@@ -3,8 +3,11 @@ package com.example.majika
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Camera
 import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCaptureSession
+import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
@@ -12,6 +15,7 @@ import android.hardware.camera2.params.SessionConfiguration
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Surface
@@ -23,14 +27,15 @@ import androidx.core.content.ContextCompat
 
 class TwibbonFragment : Fragment() {
 
-    lateinit var cameraManager: CameraManager
-    lateinit var textureView: TextureView
-    lateinit var cameraCaptureSession: CameraCaptureSession
-    lateinit var cameraDevice: CameraDevice
-    lateinit var captureRequest: CaptureRequest
-    lateinit var handler: Handler
-    lateinit var handlerThread: HandlerThread
-    lateinit var capReq: CaptureRequest.Builder
+    private lateinit var handler: Handler
+    private lateinit var handlerThread: HandlerThread
+    private lateinit var cameraManager: CameraManager
+    private lateinit var cameraId: String
+    private lateinit var cameraCaptureSession: CameraCaptureSession
+    private lateinit var textureView: TextureView
+    private lateinit var captureRequest: CaptureRequest
+    private lateinit var capReq: CaptureRequest.Builder
+    private var cameraDevice: CameraDevice ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,77 +48,81 @@ class TwibbonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        get_permissions()
+        getPermissions()
 
         textureView = view.findViewById(R.id.textureView)
-        cameraManager = requireContext().getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        cameraManager = requireActivity().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         handlerThread = HandlerThread("videoThread")
         handlerThread.start()
         handler = Handler((handlerThread).looper)
+        cameraId = getCameraId(CameraCharacteristics.LENS_FACING_FRONT)
 
-        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+        textureView.surfaceTextureListener = object: TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
-                open_camera()
+                openCamera()
             }
 
             override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
-
+                //
             }
 
             override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
-                return false
+                cameraDevice?.close()
+                cameraDevice = null
+                return true
             }
 
             override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
-
+                //
             }
         }
-
     }
 
-    @SuppressLint("MissingPermission")
-    private fun open_camera() {
-        cameraManager.openCamera(cameraManager.cameraIdList[0], object : CameraDevice.StateCallback() {
-            override fun onOpened(p0: CameraDevice) {
-                cameraDevice = p0
-
-                capReq = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                var surface = Surface(textureView.surfaceTexture)
-                capReq.addTarget(surface)
-
-                cameraDevice.createCaptureSession(listOf(surface), object: CameraCaptureSession.StateCallback() {
-                    override fun onConfigured(p0: CameraCaptureSession) {
-                        cameraCaptureSession = p0
-                        cameraCaptureSession.setRepeatingRequest(capReq.build(), null, null)
-                    }
-
-                    override fun onConfigureFailed(p0: CameraCaptureSession) {
-                        TODO("Not yet implemented")
-                    }
-                }, handler)
+    private fun openCamera() {
+        try {
+            if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                return
             }
 
-            override fun onDisconnected(p0: CameraDevice) {
-                TODO("Not yet implemented")
-            }
+            cameraManager.openCamera(cameraId, object: CameraDevice.StateCallback() {
+                override fun onOpened(p0: CameraDevice) {
+                    cameraDevice = p0
+                    capReq = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                    var surface = Surface(textureView.surfaceTexture)
+                    capReq.addTarget(surface)
 
-            override fun onError(p0: CameraDevice, p1: Int) {
-                TODO("Not yet implemented")
-            }
-        }, handler)
+                    cameraDevice!!.createCaptureSession(listOf(surface), object: CameraCaptureSession.StateCallback() {
+                        override fun onConfigured(p0: CameraCaptureSession) {
+                            cameraCaptureSession = p0
+                            cameraCaptureSession.setRepeatingRequest(capReq.build(), null, null)
+                        }
+
+                        override fun onConfigureFailed(p0: CameraCaptureSession) {
+
+                        }
+                    }, handler)
+                }
+
+                override fun onDisconnected(p0: CameraDevice) {
+                    cameraDevice?.close()
+                    cameraDevice = null
+                }
+
+                override fun onError(p0: CameraDevice, p1: Int) {
+                    cameraDevice?.close()
+                    cameraDevice = null
+                }
+            }, null)
+        } catch (err: CameraAccessException) {
+            //
+        }
     }
 
-    private fun get_permissions() {
-        var permissionList: MutableList<String> = mutableListOf<String>()
+    private fun getPermissions() {
+        var permissionList = mutableListOf<String>()
 
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(android.Manifest.permission.CAMERA)
-        }
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
         if (permissionList.size > 0) {
@@ -126,10 +135,21 @@ class TwibbonFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         grantResults.forEach {
             if (it != PackageManager.PERMISSION_GRANTED) {
-                get_permissions()
+                getPermissions()
             }
         }
+    }
+
+    private fun getCameraId(facing: Int): String {
+        for (id in cameraManager.cameraIdList) {
+            val characteristics = cameraManager.getCameraCharacteristics(id)
+            if (characteristics.get(CameraCharacteristics.LENS_FACING) == facing) {
+                return id
+            }
+        }
+        throw RuntimeException("Camera orientation does not exist.")
     }
 }
