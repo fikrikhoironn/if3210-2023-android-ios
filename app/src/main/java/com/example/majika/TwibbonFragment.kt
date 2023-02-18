@@ -22,6 +22,8 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -82,22 +84,25 @@ class TwibbonFragment : Fragment() {
             }
         }
 
-        val btnSwitch = view.findViewById<Button>(R.id.changeView)
+        val btnSwitch = view.findViewById<ImageView>(R.id.changeView)
         btnSwitch.setOnClickListener {
-            switchCamera()
+            if (!isFreeze) {
+                switchCamera()
+            }
         }
 
         imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.JPEG, 1)
-        val btnCapture = view.findViewById<Button>(R.id.captureButton)
+        val textHelper = view.findViewById<TextView>(R.id.textHelper)
+        val btnCapture = view.findViewById<ImageView>(R.id.captureButton)
         btnCapture.setOnClickListener {
             if (!isFreeze) {
                 captureImage()
-                btnCapture.text = "Preview"
+                textHelper.text = "Take Again?"
                 Toast.makeText(requireContext(), "Image Captured", Toast.LENGTH_SHORT).show()
                 isFreeze = true
             } else {
                 resumePreview()
-                btnCapture.text = "Capture"
+                textHelper.text = "Capture"
                 Toast.makeText(requireContext(), "Preview mode ON", Toast.LENGTH_SHORT).show()
                 isFreeze = false
             }
