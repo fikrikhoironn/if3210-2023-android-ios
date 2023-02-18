@@ -74,6 +74,10 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
     }
 
     private fun initRecyclerView(view: View) {
+        binding.tvMenuFood.visibility = View.GONE
+        binding.tvMenuDrink.visibility = View.GONE
+        binding.pbMenu?.visibility = View.VISIBLE
+
         binding.recyclerViewMenuFood.layoutManager = LinearLayoutManager(activity)
         binding.recyclerViewMenuFood.adapter = MenuListAdapter(menuFoodSearchList, this)
 
@@ -100,6 +104,9 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
                 menuDrinkList.addAll(menuApiDrinkList.values.toList())
                 menuDrinkSearchList.addAll(menuApiDrinkList.values.toList())
 
+                binding.tvMenuFood.visibility = View.VISIBLE
+                binding.tvMenuDrink.visibility = View.VISIBLE
+                binding.pbMenu?.visibility = View.GONE
                 (binding.recyclerViewMenuDrink.adapter as MenuListAdapter).notifyDataSetChanged()
                 (binding.recyclerViewMenuFood.adapter as MenuListAdapter).notifyDataSetChanged()
             } catch (e: Exception) {
