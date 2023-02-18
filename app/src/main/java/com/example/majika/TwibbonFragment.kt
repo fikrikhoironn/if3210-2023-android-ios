@@ -3,10 +3,7 @@ package com.example.majika
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import android.graphics.Camera
-import android.graphics.ImageFormat
-import android.graphics.SurfaceTexture
+import android.graphics.*
 import android.hardware.camera2.*
 import android.hardware.camera2.params.SessionConfiguration
 import android.media.ImageReader
@@ -43,6 +40,7 @@ class TwibbonFragment : Fragment() {
     private var cameraDevice: CameraDevice ?= null
     lateinit var imageReader: ImageReader
     private var isFreeze: Boolean = false
+    private var randomNumber: Int ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +80,16 @@ class TwibbonFragment : Fragment() {
             override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
                 //
             }
+        }
+
+        val btnRandomize = view.findViewById<ImageView>(R.id.randomizeTwibbon)
+        val twibbonView = view.findViewById<ImageView>(R.id.imageView)
+        btnRandomize.setOnClickListener {
+            if (!isFreeze) {
+                randomNumber = (1..9).random()
+                randomizeTwibbon(twibbonView, randomNumber!!)
+            }
+
         }
 
         val btnSwitch = view.findViewById<ImageView>(R.id.changeView)
@@ -219,6 +227,28 @@ class TwibbonFragment : Fragment() {
             openCamera()
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+        }
+    }
+
+    private fun randomizeTwibbon(view: ImageView, twibbonId: Int) {
+        if (twibbonId == 1) {
+            view.setImageResource(R.drawable.ic_twibbon_1)
+        } else if (twibbonId == 2) {
+            view.setImageResource(R.drawable.ic_twibbon_2)
+        } else if (twibbonId == 3) {
+            view.setImageResource(R.drawable.ic_twibbon_3)
+        } else if (twibbonId == 4) {
+            view.setImageResource(R.drawable.ic_twibbon_4)
+        } else if (twibbonId == 5) {
+            view.setImageResource(R.drawable.ic_twibbon_5)
+        } else if (twibbonId == 6) {
+            view.setImageResource(R.drawable.ic_twibbon_6)
+        } else if (twibbonId == 7) {
+            view.setImageResource(R.drawable.ic_twibbon_7)
+        } else if (twibbonId == 8) {
+            view.setImageResource(R.drawable.ic_twibbon_8)
+        } else if (twibbonId == 9) {
+            view.setImageResource(R.drawable.ic_twibbon_9)
         }
     }
 }
