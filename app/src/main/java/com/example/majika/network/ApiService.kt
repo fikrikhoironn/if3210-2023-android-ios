@@ -1,7 +1,6 @@
 package com.example.majika.network
 
 import com.example.majika.models.MenuApiModel
-import com.example.majika.models.MenuModel
 import com.example.majika.models.PaymentModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
