@@ -1,8 +1,11 @@
 package com.example.majika
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
@@ -10,12 +13,10 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.example.majika.models.MenuModel
 import com.example.majika.network.Api
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 
 class PaymentActivity : AppCompatActivity() {
@@ -47,15 +48,31 @@ class PaymentActivity : AppCompatActivity() {
                         val response = Api.retrofitService.postPayment(it.text)
                         if (response.status == "SUCCESS"){
                             Log.v("Main", "Payment Success")
-                            Toast.makeText(this@PaymentActivity, "Payment Success", Toast.LENGTH_LONG).show()
+                            this@PaymentActivity.runOnUiThread(java.lang.Runnable {
+                                val statusText = findViewById<TextView>(R.id.status_text)
+                                val imageView = findViewById<ImageView>(R.id.imageViewSuccess)
+                                imageView.visibility = ImageView.VISIBLE
+                                statusText.text = "Payment Success"
+                                val handler = android.os.Handler()
+                                handler.postDelayed({
+                                    val intent = Intent(this@PaymentActivity, MainActivity::class.java)
+                                    startActivity(intent)
+                                }, 5000)
+                            })
                         } else {
                             Log.v("Main", "Payment Failed")
-                            Toast.makeText(this@PaymentActivity, "Payment Failed", Toast.LENGTH_LONG).show()
+                            this@PaymentActivity.runOnUiThread(java.lang.Runnable {
+                                val statusText = findViewById<TextView>(R.id.status_text)
+                                val imageView = findViewById<ImageView>(R.id.imageViewFailed)
+                                imageView.visibility = ImageView.VISIBLE
+                                statusText.text = "Payment Failed"
+                            })
                         }
                     } catch (e: Exception) {
                         Log.e("Main", "Error: ${e.message}")
                     }
                 }
+
 
             }
         }
@@ -70,6 +87,7 @@ class PaymentActivity : AppCompatActivity() {
             codeScanner.startPreview()
         }
     }
+
 
 
 
