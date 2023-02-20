@@ -27,22 +27,22 @@
         android:textColor="@android:color/black"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_textView"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageViewSuccess"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="34dp"
             android:layout_below="@id/tv_textView"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_success"
-            android:visibility="gone"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:layout_margin="20dp" />
+            android:src="@drawable/ic_success"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageViewFailed"
@@ -52,7 +52,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_failed"
             android:visibility="gone"
-            android:layout_margin="20dp" />
+            />
 
         <TextView
             android:id="@+id/status_text"
@@ -60,11 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_textView"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
             android:layout_toRightOf="@id/imageViewSuccess"
             android:textSize="15sp" />
 
