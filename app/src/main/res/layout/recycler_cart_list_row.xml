@@ -41,7 +41,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:textColor="@color/black"
+                android:textColor="#EE8146"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:text="IDR 0" />
@@ -58,6 +58,7 @@
                     android:layout_height="wrap_content"
                     android:text="Jumlah"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -66,30 +67,35 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/menu_button_bg_addmorelayout"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:paddingStart="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/ivCartImageMinus"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_remove_circle"
-                        app:tint="#F9A821" />
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/ic_remove"
+                        app:tint="@color/black" />
 
                     <TextView
                         android:id="@+id/tvCartCount"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:background="@color/white"
                         android:gravity="center"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -97,11 +103,10 @@
 
                     <ImageView
                         android:id="@+id/ivCartimageAddOne"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_add_circle"
-                        app:tint="#F9A821" />
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/ic_add"
+                        app:tint="@color/black" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

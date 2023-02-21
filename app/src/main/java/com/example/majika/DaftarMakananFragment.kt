@@ -137,8 +137,6 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
 
     override fun addToCartClickListener(menu: MenuModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("DaftarMakananFragment", "Added to cart")
-            Log.d("Makanan Sebelum", database.cartDao().getAll().toString())
             database.cartDao().insertAll(
                 Cart(
                     menu.name!!,
@@ -151,29 +149,21 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
                     menu.priceInCart
                 )
             )
-            Log.d("Makanan Sesudah", database.cartDao().getAll().toString())
         }
-//        TODO("Not yet implemented")
     }
 
     override fun updateCartClickListener(menu: MenuModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("DaftarMakananFragment", "Cart updated")
-            Log.d("Makanan Sebelum", database.cartDao().getAll().toString())
             database.cartDao().update(
                 menu.name!!,
                 menu.totalInCart!!,
                 menu.priceInCart!!
             )
-            Log.d("Makanan Sesudah", database.cartDao().getAll().toString())
         }
-//        TODO("Not yet implemented")
     }
 
     override fun removeFromCartClickListener(menu: MenuModel) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("DaftarMakananFragment", "Removed from cart")
-            Log.d("Makanan Sebelum", database.cartDao().getAll().toString())
             database.cartDao().delete(
                 Cart(
                     menu.name!!,
@@ -186,8 +176,6 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
                     menu.priceInCart
                 )
             )
-            Log.d("Makanan Sesudah", database.cartDao().getAll().toString())
         }
-//        TODO("Not yet implemented")
     }
 }

@@ -64,7 +64,6 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
                 cartList.addAll(itemsInTheCartList)
 
                 totalCartPrice = database.cartDao().calculatePrice()
-                Log.d("TEST", totalCartPrice.toString())
 
                 if (totalCartPrice == null) {
                     totalCartPrice = 0
@@ -79,7 +78,6 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
     }
 
     private fun handleCheckout() {
-        Toast.makeText(activity, "Membayar IDR ${totalCartPrice.toString()}", Toast.LENGTH_LONG).show()
         val intent = Intent(activity, PaymentActivity::class.java)
         activity?.startActivity(intent)
 
@@ -87,24 +85,18 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
 
     override fun updateCartClickListener(cart: Cart) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("DaftarMakananFragment", "Cart updated")
-            Log.d("Makanan Sebelum", database.cartDao().getAll().toString())
             database.cartDao().update(
                 cart.name!!,
                 cart.totalInCart!!,
                 cart.priceInCart!!
             )
-            Log.d("Makanan Sesudah", database.cartDao().getAll().toString())
 
             initRecyclerView()
         }
-//        TODO("Not yet implemented")
     }
 
     override fun removeFromCartClickListener(cart: Cart) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("DaftarMakananFragment", "Removed from cart")
-            Log.d("Makanan Sebelum", database.cartDao().getAll().toString())
             database.cartDao().delete(
                 Cart(
                     cart.name!!,
@@ -117,10 +109,8 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
                     cart.priceInCart
                 )
             )
-            Log.d("Makanan Sesudah", database.cartDao().getAll().toString())
 
             initRecyclerView()
         }
-//        TODO("Not yet implemented")
     }
 }

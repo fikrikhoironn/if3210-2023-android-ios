@@ -64,9 +64,7 @@ class MenuListAdapter(
 
             tvMenuAddToCart.setOnClickListener {
                 menu.totalInCart = 1
-                Log.d("PRICE SEBELUM", menu.priceInCart.toString())
                 menu.priceInCart = menu.price?.times(menu.totalInCart!!)
-                Log.d("PRICE SETELAH", menu.priceInCart.toString())
                 clickListener.addToCartClickListener(menu)
                 tvMenuAddToCart.visibility = View.GONE
                 llMenuAddMoreLayout.visibility = View.VISIBLE
@@ -79,16 +77,12 @@ class MenuListAdapter(
 
                 if (total > 0) {
                     menu.totalInCart = total
-                    Log.d("PRICE SEBELUM", menu.priceInCart.toString())
                     menu.priceInCart = menu.price?.times(menu.totalInCart!!)
-                    Log.d("PRICE SETELAH", menu.priceInCart.toString())
                     clickListener.updateCartClickListener(menu)
                     tvMenuCount.text = menu.totalInCart.toString()
                 } else {
                     menu.totalInCart = null
-                    Log.d("PRICE SEBELUM", menu.priceInCart.toString())
                     menu.priceInCart = null
-                    Log.d("PRICE SETELAH", menu.priceInCart.toString())
                     clickListener.removeFromCartClickListener(menu)
 
                     tvMenuAddToCart.visibility = View.VISIBLE
@@ -101,9 +95,7 @@ class MenuListAdapter(
                 total++
 
                 menu.totalInCart = total
-                Log.d("PRICE SEBELUM", menu.priceInCart.toString())
                 menu.priceInCart = menu.price?.times(menu.totalInCart!!)
-                Log.d("PRICE SETELAH", menu.priceInCart.toString())
                 clickListener.updateCartClickListener(menu)
                 tvMenuCount.text = menu.totalInCart.toString()
             }
