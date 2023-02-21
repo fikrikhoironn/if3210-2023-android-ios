@@ -4,12 +4,11 @@
     android:id="@+id/restoranList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    card_view:cardBackgroundColor="#901c18"
-    card_view:cardCornerRadius="25dp">
+    android:layout_margin="20dp"
+    card_view:cardCornerRadius="10dp"
+    card_view:layout_constraintEnd_toEndOf="parent"
+    card_view:layout_constraintStart_toStartOf="parent"
+    card_view:layout_constraintTop_toTopOf="parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 android:layout_marginBottom="4dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#fff4e7" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/popularFood"
@@ -36,32 +35,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:textSize="18sp"
-                android:textColor="#fff4e7" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/restoranAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textColor="#fff4e7"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/contactPerson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
-                android:textColor="#fff4e7"/>
+                android:textColor="#EE8146"/>
 
             <Button
                 android:id="@+id/btnMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Maps"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#f7e1c9"
-                android:textColor="#901c18"
-                card_view:cornerRadius="18dp"/>
+                android:layout_gravity="right"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#EE8146"
+                android:textColor="#FFFFFF"
+                card_view:cornerRadius="10dp"/>
         </LinearLayout>
     </RelativeLayout>
 

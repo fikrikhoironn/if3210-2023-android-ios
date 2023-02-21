@@ -53,7 +53,7 @@ class CabangRestoranAdapter(
             restoranName.text = cabangRestoran.name
             popularFood.text = cabangRestoran.popular_food
             restoranAddress.text = cabangRestoran.address
-            contactPerson.text = "Contact ${cabangRestoran.contact_person} (${cabangRestoran.phone_number})"
+            contactPerson.text = "Contact: ${cabangRestoran.contact_person} (${cabangRestoran.phone_number})"
             btnMap.setOnClickListener {
                 val gmmIntentUri = Uri.parse("geo:${cabangRestoran.latitude},${cabangRestoran.longitude}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
