@@ -25,6 +25,10 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+        val price = intent.getStringExtra("totalPrice")
+        Log.d("Main", "Total Price: $price")
+        val textView = findViewById<TextView>(R.id.tv_textView)
+        textView.text = "Total Price: ${intent.getStringExtra("totalPrice")}"
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
 
         codeScanner = CodeScanner(this, scannerView)

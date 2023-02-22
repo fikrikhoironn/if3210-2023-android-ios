@@ -79,6 +79,7 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
 
     private fun handleCheckout() {
         val intent = Intent(activity, PaymentActivity::class.java)
+        intent.putExtra("totalPrice", totalCartPrice.toString())
         activity?.startActivity(intent)
 
     }
