@@ -38,12 +38,6 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
     private lateinit var binding: FragmentDaftarMakananBinding
     private lateinit var database: MajikaRoomDatabase
 
-
-    private var temperatureSensorListener: SensorEventListener? = null
-    private lateinit var sensorManager: SensorManager
-    private lateinit var temperatureSensor: Sensor
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,39 +65,6 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
             }
 
         })
-
-        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
-
-        if (temperatureSensor == null) {
-            Log.e("SUHU", "Perangkat tidak memiliki sensor suhu")
-        } else {
-            Log.d("SUHU", "Perangkat memiliki sensor suhu")
-            val temperatureListener = object : SensorEventListener {
-                override fun onSensorChanged(event: SensorEvent?) {
-                    val temperature = event?.values?.get(0)
-                    Log.d("TAG", "Suhu: $temperature")
-
-                    // Update text pada TextView tvSuhu
-//                    activity?.runOnUiThread {
-//                        view?.findViewById<TextView>(R.id.tvSuhu)?.text = "Suhu: $temperature"
-//                    }
-                }
-
-                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                    // Tidak perlu diimplementasikan
-                }
-            }
-
-            sensorManager.registerListener(
-                temperatureListener,
-                temperatureSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-
-            // Simpan listener di dalam variabel instance agar bisa dimatikan di onDestroyView()
-            temperatureSensorListener = temperatureListener
-        }
     }
 
     private suspend fun getMenuFoodData(): List<MenuModel?>? {
@@ -222,17 +183,5 @@ class DaftarMakananFragment : Fragment(), MenuListAdapter.MenuListClickListener 
                 )
             )
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Hapus listener dari SensorManager
-        temperatureSensorListener?.let {
-            sensorManager.unregisterListener(it)
-        }
-
-        // Kosongkan variabel instance yang menyimpan listener
-        temperatureSensorListener = null
     }
 }

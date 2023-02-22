@@ -14,35 +14,28 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(DaftarMakananFragment())
+        replaceHeader("daftar_makanan")
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.cabang_restoran -> {
-                    val actionBar: ActionBar? = supportActionBar
-                    actionBar?.setTitle("Cabang Restoran")
-                    actionBar?.setDisplayHomeAsUpEnabled(true)
                     replaceFragment(CabangRestoranFragment())
+                    replaceHeader("cabang_restoran")
                     true
                 }
                 R.id.daftar_makanan -> {
-                    val actionBar: ActionBar? = supportActionBar
-                    actionBar?.setTitle("Daftar Menu")
-                    actionBar?.setDisplayHomeAsUpEnabled(true)
                     replaceFragment(DaftarMakananFragment())
+                    replaceHeader("daftar_makanan")
                     true
                 }
                 R.id.twibbon -> {
-                    val actionBar: ActionBar? = supportActionBar
-                    actionBar?.setTitle("Twibbon")
-                    actionBar?.setDisplayHomeAsUpEnabled(true)
                     replaceFragment(TwibbonFragment())
+                    replaceHeader("twibbon")
                     true
                 }
                 R.id.keranjang -> {
-                    val actionBar: ActionBar? = supportActionBar
-                    actionBar?.setTitle("Keranjang")
-                    actionBar?.setDisplayHomeAsUpEnabled(true)
                     replaceFragment(KeranjangFragment())
+                    replaceHeader("keranjang")
                     true
                 }
                 else -> false
@@ -54,6 +47,14 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
+    }
+
+    private fun replaceHeader(fragment: String) {
+        val headerFragment: Fragment = HeaderFragment.newInstance(fragment)
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.header_frame_layout, headerFragment)
         fragmentTransaction.commit()
     }
 }
