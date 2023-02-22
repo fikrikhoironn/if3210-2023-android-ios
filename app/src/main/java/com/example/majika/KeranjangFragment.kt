@@ -81,6 +81,7 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
     private fun handleCheckout() {
         Toast.makeText(activity, "Membayar IDR ${totalCartPrice.toString()}", Toast.LENGTH_LONG).show()
         val intent = Intent(activity, PaymentActivity::class.java)
+        intent.putExtra("totalPrice", totalCartPrice.toString())
         activity?.startActivity(intent)
 
     }
