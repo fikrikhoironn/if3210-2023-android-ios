@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PaymentActivity">
+    tools:context=".PaymentActivity"
+    tools:ignore="NotSibling">
 
     <FrameLayout
         android:id="@+id/header_frame_layout"
@@ -38,6 +39,7 @@
         android:textColor="@android:color/black"/>
 
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_textView"
@@ -46,12 +48,10 @@
 
         <ImageView
             android:id="@+id/imageViewSuccess"
-            android:layout_width="30dp"
-            android:layout_height="34dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tv_textView"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
             android:src="@drawable/ic_success"
             android:visibility="gone" />
 
@@ -69,13 +69,31 @@
             android:id="@+id/status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_textView"
+            android:layout_below="@id/linear_layout"
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/imageViewSuccess"
             android:textSize="15sp" />
 
+
+
+
+
+
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:text="Scan Ulang"
+        android:visibility="gone"
+        android:id="@+id/btn_retry"
+        android:background="@drawable/menu_button_bg_addtocart"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:padding="10dp"/>
 
 
 

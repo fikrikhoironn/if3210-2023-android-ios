@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,10 +30,13 @@ class PaymentActivity : AppCompatActivity() {
 
         replaceHeader("payment")
 
+        val retryButton = findViewById<TextView>(R.id.btn_retry)
+        retryButton.visibility = View.GONE
+
         val price = intent.getStringExtra("totalPrice")
         Log.d("Main", "Total Price: $price")
         val textView = findViewById<TextView>(R.id.tv_textView)
-        textView.text = "Total Price: ${intent.getStringExtra("totalPrice")}"
+        textView.text = "Total Price: Rp ${intent.getStringExtra("totalPrice")}"
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
 
         codeScanner = CodeScanner(this, scannerView)
@@ -74,6 +78,7 @@ class PaymentActivity : AppCompatActivity() {
                                 val imageView = findViewById<ImageView>(R.id.imageViewFailed)
                                 imageView.visibility = ImageView.VISIBLE
                                 statusText.text = "Payment Failed"
+                                retryButton.visibility = View.VISIBLE
                             })
                         }
                     } catch (e: Exception) {
@@ -93,6 +98,11 @@ class PaymentActivity : AppCompatActivity() {
 
         scannerView.setOnClickListener {
             codeScanner.startPreview()
+        }
+
+        retryButton.setOnClickListener {
+            codeScanner.startPreview()
+            retryButton.visibility = View.GONE
         }
     }
 
