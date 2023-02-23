@@ -58,12 +58,14 @@ class PaymentActivity : AppCompatActivity() {
                     try {
                         Log.v("Main", "Scan result: ${it.text}")
                         val response = Api.retrofitService.postPayment(it.text)
+                        val imageViewSuccess = findViewById<ImageView>(R.id.imageViewSuccess)
+                        val imageViewFailed = findViewById<ImageView>(R.id.imageViewFailed)
                         if (response.status == "SUCCESS"){
                             Log.v("Main", "Payment Success")
                             this@PaymentActivity.runOnUiThread(java.lang.Runnable {
                                 val statusText = findViewById<TextView>(R.id.status_text)
-                                val imageView = findViewById<ImageView>(R.id.imageViewSuccess)
-                                imageView.visibility = ImageView.VISIBLE
+                                imageViewFailed.visibility = ImageView.GONE
+                                imageViewSuccess.visibility = ImageView.VISIBLE
                                 statusText.text = "Payment Success"
                                 val handler = android.os.Handler()
                                 handler.postDelayed({
@@ -75,8 +77,7 @@ class PaymentActivity : AppCompatActivity() {
                             Log.v("Main", "Payment Failed")
                             this@PaymentActivity.runOnUiThread(java.lang.Runnable {
                                 val statusText = findViewById<TextView>(R.id.status_text)
-                                val imageView = findViewById<ImageView>(R.id.imageViewFailed)
-                                imageView.visibility = ImageView.VISIBLE
+                                imageViewFailed.visibility = ImageView.VISIBLE
                                 statusText.text = "Payment Failed"
                                 retryButton.visibility = View.VISIBLE
                             })

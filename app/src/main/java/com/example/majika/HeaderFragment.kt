@@ -24,7 +24,7 @@ class HeaderFragment : Fragment(), SensorEventListener {
     private var isSupportSensor: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstancpaeState)
+        super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
         }
@@ -37,7 +37,6 @@ class HeaderFragment : Fragment(), SensorEventListener {
         } else {
             isSupportSensor = true
             temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
-            Log.e("SUHU", temperatureSensor.toString())
         }
     }
 
