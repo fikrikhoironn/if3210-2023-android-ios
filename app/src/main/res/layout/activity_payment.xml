@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".PaymentActivity">
 
+    <FrameLayout
+        android:id="@+id/header_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/scanner_view"
         android:layout_width="match_parent"
@@ -13,6 +23,7 @@
         app:autoFocusButtonColor="@android:color/white"
         app:autoFocusButtonVisible="true"
         app:flashButtonColor="@android:color/white"
+        android:layout_below="@id/header_frame_layout"
         app:flashButtonVisible="true"
         app:maskColor="#6C000000" />
 

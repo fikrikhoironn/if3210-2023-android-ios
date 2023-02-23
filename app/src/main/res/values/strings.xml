@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Majika</string>
-    <string name="daftar_makanan">Daftar Makanan</string>
+    <string name="menu">Menu</string>
     <string name="cabang_restoran">Cabang Restoran</string>
     <string name="twibbon">Twibbon</string>
     <string name="keranjang">Keranjang</string>

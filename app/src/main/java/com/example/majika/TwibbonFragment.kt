@@ -1,31 +1,23 @@
 package com.example.majika
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.*
-import android.hardware.camera2.params.SessionConfiguration
 import android.media.ImageReader
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import java.io.File
 
 class TwibbonFragment : Fragment() {
 
@@ -33,7 +25,7 @@ class TwibbonFragment : Fragment() {
     private lateinit var handlerThread: HandlerThread
     private lateinit var cameraManager: CameraManager
     private lateinit var cameraId: String
-    private lateinit var cameraCaptureSession: CameraCaptureSession
+    private var cameraCaptureSession: CameraCaptureSession ?= null
     private lateinit var textureView: TextureView
     private lateinit var captureRequest: CaptureRequest
     private lateinit var capReq: CaptureRequest.Builder
@@ -109,7 +101,7 @@ class TwibbonFragment : Fragment() {
                 Toast.makeText(requireContext(), "Image Captured", Toast.LENGTH_SHORT).show()
                 isFreeze = true
             } else {
-                resumePreview()
+                openCamera()
                 textHelper.text = "Capture"
                 Toast.makeText(requireContext(), "Preview mode ON", Toast.LENGTH_SHORT).show()
                 isFreeze = false
@@ -133,7 +125,7 @@ class TwibbonFragment : Fragment() {
                     cameraDevice!!.createCaptureSession(listOf(surface, imageReader.surface), object: CameraCaptureSession.StateCallback() {
                         override fun onConfigured(p0: CameraCaptureSession) {
                             cameraCaptureSession = p0
-                            cameraCaptureSession.setRepeatingRequest(capReq.build(), null, null)
+                            cameraCaptureSession?.setRepeatingRequest(capReq.build(), null, null)
                         }
 
                         override fun onConfigureFailed(p0: CameraCaptureSession) {
@@ -198,13 +190,14 @@ class TwibbonFragment : Fragment() {
             set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         }?.build()
 
-        cameraCaptureSession.stopRepeating()
+        cameraCaptureSession?.stopRepeating()
         captureBuilder.let {
-            cameraCaptureSession.setRepeatingRequest(it!!, null, null)
+            cameraCaptureSession?.setRepeatingRequest(it!!, null, null)
         }
     }
 
     private fun resumePreview() {
+        cameraCaptureSession = null
         val previewRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
         previewRequestBuilder?.addTarget(Surface(textureView.surfaceTexture))
 

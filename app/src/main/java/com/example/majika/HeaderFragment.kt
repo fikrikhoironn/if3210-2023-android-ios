@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 
 private const val ARG_PARAM1 = "param1"
@@ -36,6 +37,9 @@ class HeaderFragment : Fragment() {
             "daftar_makanan" -> {
                 R.layout.fragment_header_daftar_makanan
             }
+            "payment" -> {
+                R.layout.fragment_header_payment
+            }
             else -> {
                 R.layout.fragment_header
             }
@@ -58,6 +62,9 @@ class HeaderFragment : Fragment() {
             }
             "twibbon" -> {
                 "Twibbon"
+            }
+            "payment" -> {
+                "Payment"
             }
             else -> {
                 R.layout.fragment_header
@@ -97,6 +104,12 @@ class HeaderFragment : Fragment() {
 
                 // Simpan listener di dalam variabel instance agar bisa dimatikan di onDestroyView()
                 temperatureSensorListener = temperatureListener
+            }
+        }
+
+        if (param1 == "payment") {
+            view.findViewById<ImageButton>(R.id.ibBack).setOnClickListener {
+                requireActivity().onBackPressed()
             }
         }
     }

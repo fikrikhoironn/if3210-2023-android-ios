@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -25,6 +26,9 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+
+        replaceHeader("payment")
+
         val price = intent.getStringExtra("totalPrice")
         Log.d("Main", "Total Price: $price")
         val textView = findViewById<TextView>(R.id.tv_textView)
@@ -92,9 +96,6 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     override fun onResume() {
         super.onResume()
         codeScanner.startPreview()
@@ -105,4 +106,11 @@ class PaymentActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    private fun replaceHeader(fragment: String) {
+        val headerFragment: Fragment = HeaderFragment.newInstance(fragment)
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.header_frame_layout, headerFragment)
+        fragmentTransaction.commit()
+    }
 }
