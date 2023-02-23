@@ -62,8 +62,10 @@ class PaymentActivity : AppCompatActivity() {
                             Log.v("Main", "Payment Success")
                             this@PaymentActivity.runOnUiThread(java.lang.Runnable {
                                 val statusText = findViewById<TextView>(R.id.status_text)
-                                val imageView = findViewById<ImageView>(R.id.imageViewSuccess)
-                                imageView.visibility = ImageView.VISIBLE
+                                val imageViewSuccess = findViewById<ImageView>(R.id.imageViewSuccess)
+                                imageViewSuccess.visibility = ImageView.VISIBLE
+                                val imageViewFailed = findViewById<ImageView>(R.id.imageViewFailed)
+                                imageViewFailed.visibility = ImageView.GONE
                                 statusText.text = "Payment Success"
                                 val handler = android.os.Handler()
                                 handler.postDelayed({
@@ -75,8 +77,10 @@ class PaymentActivity : AppCompatActivity() {
                             Log.v("Main", "Payment Failed")
                             this@PaymentActivity.runOnUiThread(java.lang.Runnable {
                                 val statusText = findViewById<TextView>(R.id.status_text)
-                                val imageView = findViewById<ImageView>(R.id.imageViewFailed)
-                                imageView.visibility = ImageView.VISIBLE
+                                val imageViewSuccess = findViewById<ImageView>(R.id.imageViewSuccess)
+                                imageViewSuccess.visibility = ImageView.GONE
+                                val imageViewFailed = findViewById<ImageView>(R.id.imageViewFailed)
+                                imageViewFailed.visibility = ImageView.VISIBLE
                                 statusText.text = "Payment Failed"
                                 retryButton.visibility = View.VISIBLE
                             })

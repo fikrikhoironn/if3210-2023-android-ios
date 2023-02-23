@@ -17,16 +17,26 @@ import android.widget.TextView
 
 private const val ARG_PARAM1 = "param1"
 
-class HeaderFragment : Fragment() {
+class HeaderFragment : Fragment(), SensorEventListener {
     private var param1: String? = null
-    private var temperatureSensorListener: SensorEventListener? = null
+    private var temperatureSensor: Sensor? = null
     private lateinit var sensorManager: SensorManager
-    private lateinit var temperatureSensor: Sensor
+    private var isSupportSensor: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
+        }
+
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) == null) {
+            isSupportSensor = false
+            Log.e("SUHU", "Perangkat tidak memiliki sensor suhu")
+        } else {
+            isSupportSensor = true
+            temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
         }
     }
 
@@ -72,39 +82,8 @@ class HeaderFragment : Fragment() {
         }
         view.findViewById<TextView>(R.id.tvHeader).text = title.toString()
 
-        if (param1 == "daftar_makanan") {
-            sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-            temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
-
-            view.findViewById<TextView>(R.id.tvSuhu)?.text = "Suhu: "
-
-            if (temperatureSensor == null) {
-                Log.e("SUHU", "Perangkat tidak memiliki sensor suhu")
-            } else {
-                val temperatureListener = object : SensorEventListener {
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        val temperature = event?.values?.get(0)
-
-                        // Update text pada TextView tvSuhu
-                        activity?.runOnUiThread {
-                            view.findViewById<TextView>(R.id.tvSuhu)?.text = "Suhu: $temperature"
-                        }
-                    }
-
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                        // Tidak perlu diimplementasikan
-                    }
-                }
-
-                sensorManager.registerListener(
-                    temperatureListener,
-                    temperatureSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
-                )
-
-                // Simpan listener di dalam variabel instance agar bisa dimatikan di onDestroyView()
-                temperatureSensorListener = temperatureListener
-            }
+        if (!isSupportSensor) {
+            view?.findViewById<TextView>(R.id.tvSuhu)?.text = "Suhu: -"
         }
 
         if (param1 == "payment") {
@@ -114,24 +93,29 @@ class HeaderFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
 
-        // Hapus listener dari SensorManager
-        temperatureSensorListener?.let {
-            sensorManager.unregisterListener(it)
-        }
-
-        // Kosongkan variabel instance yang menyimpan listener
-        temperatureSensorListener = null
+        sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     companion object {
         @JvmStatic fun newInstance(param1: String) =
-                HeaderFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                    }
+            HeaderFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
                 }
+            }
+    }
+
+    override fun onSensorChanged(p0: SensorEvent?) {
+        // Update text pada TextView tvSuhu
+        if (param1 == "daftar_makanan") {
+            view?.findViewById<TextView>(R.id.tvSuhu)?.text = "Suhu: ${p0?.values?.get(0)}"
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        // Tidak perlu diimplementasikan
     }
 }
