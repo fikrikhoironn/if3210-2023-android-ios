@@ -68,8 +68,10 @@ class KeranjangFragment : Fragment(), CartListAdapter.CartListClickListener {
                 if (totalCartPrice == null) {
                     totalCartPrice = 0
                     binding.tvCartCheckout.visibility = View.GONE
+                    binding.tvCartTotal.text = totalCartPrice.toString()
+                } else {
+                    binding.tvCartTotal.text = "${itemsInTheCartList[0]?.currency} ${totalCartPrice}"
                 }
-                binding.tvCartTotal.text = totalCartPrice.toString()
 
                 (binding.recyclerViewCart.adapter as CartListAdapter).notifyDataSetChanged()
             } catch (e: Exception) {
