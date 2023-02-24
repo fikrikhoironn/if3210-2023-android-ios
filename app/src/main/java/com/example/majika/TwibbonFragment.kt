@@ -25,7 +25,7 @@ class TwibbonFragment : Fragment() {
     private lateinit var handlerThread: HandlerThread
     private lateinit var cameraManager: CameraManager
     private lateinit var cameraId: String
-    private var cameraCaptureSession: CameraCaptureSession ?= null
+    private lateinit var cameraCaptureSession: CameraCaptureSession
     private lateinit var textureView: TextureView
     private lateinit var captureRequest: CaptureRequest
     private lateinit var capReq: CaptureRequest.Builder
@@ -125,7 +125,7 @@ class TwibbonFragment : Fragment() {
                     cameraDevice!!.createCaptureSession(listOf(surface, imageReader.surface), object: CameraCaptureSession.StateCallback() {
                         override fun onConfigured(p0: CameraCaptureSession) {
                             cameraCaptureSession = p0
-                            cameraCaptureSession?.setRepeatingRequest(capReq.build(), null, null)
+                            cameraCaptureSession.setRepeatingRequest(capReq.build(), null, null)
                         }
 
                         override fun onConfigureFailed(p0: CameraCaptureSession) {
@@ -190,14 +190,13 @@ class TwibbonFragment : Fragment() {
             set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         }?.build()
 
-        cameraCaptureSession?.stopRepeating()
+        cameraCaptureSession.stopRepeating()
         captureBuilder.let {
-            cameraCaptureSession?.setRepeatingRequest(it!!, null, null)
+            cameraCaptureSession.setRepeatingRequest(it!!, null, null)
         }
     }
 
     private fun resumePreview() {
-        cameraCaptureSession = null
         val previewRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
         previewRequestBuilder?.addTarget(Surface(textureView.surfaceTexture))
 
